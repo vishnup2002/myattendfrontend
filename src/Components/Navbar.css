@@ -1,0 +1,15 @@
+.navbar {
+  height: 60px;
+  /* position: fixed; */
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.loginSignup {
+  margin-left: auto;
+  /* margin-right: 20px; */
+}
