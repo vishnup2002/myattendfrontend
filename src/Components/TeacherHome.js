@@ -54,26 +54,32 @@ function TeacherHome(props) {
                   <p className="card-text">
                     {"Students : " + classroom.Students.length}
                   </p>
-                  <Button
-                    variant="outline-primary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigator.clipboard.writeText(
-                        `${window.location.origin.toString()}/student/join?classid=${
-                          classroom._id
-                        }`
-                      );
-                      e.target.innerText = "Copied to clipboard";
-                      e.target.className = "btn btn-outline-success";
-                      setTimeout(() => {
-                        e.target.innerText = "Copy joining link";
-                        e.target.className = "btn btn-outline-primary";
-                        e.target.blur();
-                      }, 2000);
-                    }}
-                  >
-                    Copy joining link
-                  </Button>
+                  {navigator.clipboard ? (
+                    <Button
+                      variant="outline-primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigator.clipboard.writeText(
+                          `${window.location.origin.toString()}/student/join?classid=${
+                            classroom._id
+                          }`
+                        );
+                        e.target.innerText = "Copied to clipboard";
+                        e.target.className = "btn btn-outline-success";
+                        setTimeout(() => {
+                          e.target.innerText = "Copy joining link";
+                          e.target.className = "btn btn-outline-primary";
+                          e.target.blur();
+                        }, 2000);
+                      }}
+                    >
+                      Copy joining link
+                    </Button>
+                  ) : (
+                    <p>{`${window.location.origin.toString()}/student/join?classid=${
+                      classroom._id
+                    }`}</p>
+                  )}
                 </div>
               </div>
             </Link>
