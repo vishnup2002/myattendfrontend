@@ -15,7 +15,7 @@ function Form({ option, setStatus }) {
     if (auth.isLoggedIn) {
       navigate("/" + auth.user);
     }
-  });
+  }, [auth, navigate]);
 
   const dispatch = useDispatch();
 
@@ -139,7 +139,7 @@ function LoginSignupStudent() {
             (option === 1 ? "sign-in" : option === 2 ? "sign-up" : "forgot")
           }
         >
-          <span>Sign in to your account</span>
+          <span>Sign in as Student</span>
           <span>Create an account</span>
           <span>Reset your password</span>
         </div>

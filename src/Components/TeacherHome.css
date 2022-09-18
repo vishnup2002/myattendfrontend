@@ -1,0 +1,30 @@
+.dashboard {
+  display: flex;
+  min-height: 150px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+#classroom-list-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.classroom-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+#progress-bar-container-super {
+  display: flex;
+
+  justify-content: center;
+  padding-top: 100px;
+}
+
+#progress-bar-container {
+  width: 15rem;
+}
