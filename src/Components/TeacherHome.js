@@ -21,7 +21,6 @@ function TeacherHome(props) {
       const data = await resp.json();
       setClassrooms(data.data.classrooms);
       setUserName(data.data.userName);
-      console.log(data.data.classrooms);
     };
 
     fetchClassrooms();

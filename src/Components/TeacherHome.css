@@ -27,4 +27,16 @@
 
 #progress-bar-container {
   width: 15rem;
+  animation: zoom-in 0.8s normal forwards 1;
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

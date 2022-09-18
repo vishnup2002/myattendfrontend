@@ -24,7 +24,6 @@ function Classroom() {
       const data = await resp.json();
       setSessions(data.data.sessions);
       setClassname(data.data.className);
-      console.log(data.data.sessions);
     };
 
     fetchSessions();

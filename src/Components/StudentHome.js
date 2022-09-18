@@ -20,7 +20,7 @@ function StudentHome(props) {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [sessions, setSessions] = useState([]);
-  const [state, setState] = useState(false);
+
   const socketRef = useRef();
 
   useEffect(() => {
@@ -53,7 +53,6 @@ function StudentHome(props) {
   const handleAuth = async (sid) => {
     let resp = await fetch(handleAuthURL(sid), options("GET"));
     if (resp.status === 409) {
-      setState(true);
     } else {
       let data = await resp.json();
 
@@ -74,10 +73,16 @@ function StudentHome(props) {
 
       if (verificationJSON && verificationJSON.verified) {
         console.log(verificationJSON);
-        setState(true);
-        socketRef.current.emit("marked-attendance", {
-          sid,
-        });
+        const fetchactivesessions = async () => {
+          const resp = await fetch(getActiveClassroomsURL, options("GET"));
+          const data = await resp.json();
+
+          setSessions(data.data.activeSessions);
+          socketRef.current.emit("marked-attendance", {
+            sid,
+          });
+        };
+        fetchactivesessions();
       } else {
         console.log("error");
       }
@@ -108,31 +113,27 @@ function StudentHome(props) {
                 <h6 className="card-subtitle mb-2 text-muted">
                   {session.createdAt.slice(0, 10)}
                 </h6>
+                <Button
+                  variant="primary"
+                  onClick={(e) => {
+                    const getAuthstatus = async (e) => {
+                      const resp = await fetch(
+                        getAuthStatusURL,
+                        options("GET")
+                      );
+                      const data = await resp.json();
+                      if (data.status === false) {
+                        navigate("/student/register-auth");
+                      } else {
+                        handleAuth(session._id);
+                      }
+                    };
 
-                {!state ? (
-                  <Button
-                    variant="primary"
-                    onClick={(e) => {
-                      const getAuthstatus = async () => {
-                        const resp = await fetch(
-                          getAuthStatusURL,
-                          options("GET")
-                        );
-                        const data = await resp.json();
-                        if (data.status === false) {
-                          navigate("/student/register-auth");
-                        } else {
-                          handleAuth(session._id);
-                        }
-                      };
-                      getAuthstatus();
-                    }}
-                  >
-                    Mark Attendance
-                  </Button>
-                ) : (
-                  <Button variant="success">Marked attendance</Button>
-                )}
+                    getAuthstatus(e);
+                  }}
+                >
+                  Mark Attendance
+                </Button>
               </div>
             </div>
             // </Link>

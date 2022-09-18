@@ -12,6 +12,7 @@ import { options } from "../Utils/req";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./TeacherHome.css";
+import "./Session.css";
 
 function Session(props) {
   const searchParams = useSearchParams()[0];
@@ -21,7 +22,8 @@ function Session(props) {
   const [presentCount, setPresentCount] = useState(0);
   const sessionid = searchParams.get("sessionid");
   const sessionName = searchParams.get("session-name");
-
+  const [absentStudents, setAbsentStudents] = useState([]);
+  const [totalStudents, setTotalStudents] = useState([]);
   const [presentStudents, setPresentStudents] = useState([]);
 
   //socket.io
@@ -36,6 +38,12 @@ function Session(props) {
       setPresentStudents(data.data.present);
       setActive(data.data.sessionStatus);
       setStrength(data.data.classStrength);
+      setTotalStudents(data.data.students);
+      let abs = data.data.students.filter((student) => {
+        return !data.data.present.some((value) => value._id === student._id);
+      });
+
+      setAbsentStudents(abs);
     };
     getPresent();
   }, [sessionid]);
@@ -44,10 +52,8 @@ function Session(props) {
     const socket = io.connect(BASE_URL);
 
     socket.on("connect", () => {
-      console.log("connected");
       socket.emit("join-room", sessionid);
       socket.on("attendance-count", (data) => {
-        console.log(data);
         setPresentCount(data.count);
       });
     });
@@ -59,16 +65,22 @@ function Session(props) {
 
   const handleActivate = async (e) => {
     await fetch(activateAttendanceURL(sessionid), options("GET"));
-    console.log("activated");
+
     setActive(true);
   };
 
   const handleDeactivate = async (e) => {
     await fetch(deactivateAttendanceURL(sessionid), options("GET"));
-    console.log("deactivated");
+
     const resp = await fetch(getPresentStudentsURL(sessionid), options("GET"));
     const data = await resp.json();
     setPresentStudents(data.data.present);
+
+    let abs = totalStudents.filter((student) => {
+      return !data.data.present.some((value) => value._id === student._id);
+    });
+
+    setAbsentStudents(abs);
     setActive(false);
   };
   return (
@@ -98,19 +110,36 @@ function Session(props) {
       </div>
       {!active ? (
         <div id="present-students-list-container">
-          <h3 className="ms-2 mt-3">Present Students</h3>
-          <ul className="list-group list-group-flush list-group-numbered list-group-flush">
-            {presentStudents.map((student, index) => {
-              return (
-                <li
-                  className="list-group-item p-3 bg-transparent color text-white"
-                  key={index}
-                >
-                  {student.name}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="m-3">
+            <h3 className="ms-2 mt-3">Present Students</h3>
+            <ul className="list-group list-group-flush list-group-numbered list-group-flush">
+              {presentStudents.map((student, index) => {
+                return (
+                  <li
+                    className="list-group-item p-3 bg-transparent color text-white"
+                    key={index}
+                  >
+                    {student.name}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className="m-3">
+            <h3 className="ms-2 mt-3">Absent Students</h3>
+            <ul className="list-group list-group-flush list-group-numbered list-group-flush">
+              {absentStudents.map((student, index) => {
+                return (
+                  <li
+                    className="list-group-item p-3 bg-transparent color text-white"
+                    key={index}
+                  >
+                    {student.name}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       ) : (
         <div id="progress-bar-container-super">

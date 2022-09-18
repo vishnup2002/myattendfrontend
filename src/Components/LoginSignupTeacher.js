@@ -29,7 +29,8 @@ function Form({ option, setStatus }) {
     };
   };
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.target.disabled = true;
     if (option === 1) {
       const body = JSON.stringify({
         email,
@@ -67,6 +68,7 @@ function Form({ option, setStatus }) {
       }
     } else if (option === 3) {
     }
+    e.target.disabled = false;
   }
 
   return (
@@ -116,8 +118,8 @@ function Form({ option, setStatus }) {
       <button
         className="btn-submit-form mt-4"
         type="submit"
-        onClick={() => {
-          handleSubmit();
+        onClick={(e) => {
+          handleSubmit(e);
         }}
       >
         {option === 1 ? "Sign in" : option === 2 ? "Sign up" : "Reset password"}
