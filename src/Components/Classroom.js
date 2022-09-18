@@ -38,26 +38,28 @@ function Classroom() {
         </Link>
         <p>
           <div className="m-5">
-            <Button
-              variant="outline-primary"
-              onClick={(e) => {
-                e.preventDefault();
-                navigator.clipboard.writeText(
-                  `${window.location.origin.toString()}/student/join?classid=${classid}`
-                );
-                e.target.innerText = "Copied to clipboard";
-                e.target.className = "btn btn-outline-success";
-                setTimeout(() => {
-                  e.target.innerText = "Copy joining link";
-                  e.target.className = "btn btn-outline-primary";
-                  e.target.blur();
-                }, 2000);
-              }}
-            >
-              Copy joining link
-            </Button>
-
-            <p>{`${window.location.origin.toString()}/student/join?classid=${classid}`}</p>
+            {navigator.clipboard ? (
+              <Button
+                variant="outline-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigator.clipboard.writeText(
+                    `${window.location.origin.toString()}/student/join?classid=${classid}`
+                  );
+                  e.target.innerText = "Copied to clipboard";
+                  e.target.className = "btn btn-outline-success";
+                  setTimeout(() => {
+                    e.target.innerText = "Copy joining link";
+                    e.target.className = "btn btn-outline-primary";
+                    e.target.blur();
+                  }, 2000);
+                }}
+              >
+                Copy joining link
+              </Button>
+            ) : (
+              <p>{`${window.location.origin.toString()}/student/join?classid=${classid}`}</p>
+            )}
           </div>
         </p>
       </div>
