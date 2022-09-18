@@ -37,17 +37,16 @@ function TeacherHome(props) {
       <div id="classroom-list-container">
         {classrooms.map((classroom, index) => {
           return (
-            <Link
-              to={`/classroom?classid=${classroom._id}`}
-              key={index}
-              className="classroom-card"
-            >
+            <div key={index} className="classroom-card">
               <div
                 className="card bg-transparent border border-primary m-2"
                 style={{ width: "18rem" }}
               >
                 <div className="card-body">
-                  <h5 className="card-title">{classroom.name}</h5>
+                  <Link to={`/classroom?classid=${classroom._id}`}>
+                    <h5 className="card-title">{classroom.name}</h5>
+                  </Link>
+
                   <h6 className="card-subtitle mb-2 text-muted">
                     {classroom.teacher.name}
                   </h6>
@@ -82,7 +81,7 @@ function TeacherHome(props) {
                   )}
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>
