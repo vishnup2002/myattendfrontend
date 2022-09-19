@@ -1,8 +1,9 @@
 // export const ROOT_URL = "http://localhost:8000/api/v1/";
-export const ROOT_URL = "http://18.183.199.34:8000/api/v1/";
+// export const ROOT_URL = "http://18.183.199.34:8000/api/v1/";
+export const ROOT_URL = "https://myattend-app.herokuapp.com/api/v1/";
 
-// export const BASE_URL = "http://localhost:8001";
-export const BASE_URL = "http://18.183.199.34:8001";
+// export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://myattend-app.herokuapp.com/";
 
 export const RegisterStudentURL = ROOT_URL + "user/student/register";
 

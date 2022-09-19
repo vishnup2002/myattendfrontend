@@ -53,7 +53,7 @@ function TeacherHome(props) {
                   <p className="card-text">
                     {"Students : " + classroom.Students.length}
                   </p>
-                  {/* {navigator.clipboard ? (
+                  {navigator.clipboard ? (
                     <Button
                       variant="outline-primary"
                       onClick={(e) => {
@@ -78,7 +78,7 @@ function TeacherHome(props) {
                     <p>{`${window.location.origin.toString()}/student/join?classid=${
                       classroom._id
                     }`}</p>
-                  )} */}
+                  )}
                 </div>
               </div>
             </div>
