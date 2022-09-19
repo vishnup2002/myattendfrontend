@@ -104,10 +104,10 @@ function Form({ option, setStatus }) {
         />
         <input
           className="text-white border-bottom border-success"
-          id="repeat-password"
-          name="repeat-password"
-          type="password"
-          placeholder="Repeat password"
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Name"
           required={option === 2 ? true : false}
           disabled={option === 1 || option === 3 ? true : false}
           onChange={(e) => {
