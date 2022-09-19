@@ -13,6 +13,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./TeacherHome.css";
 import "./Session.css";
+import { InfinitySpin } from "react-loader-spinner";
 
 function Session(props) {
   const searchParams = useSearchParams()[0];
@@ -25,6 +26,7 @@ function Session(props) {
   const [absentStudents, setAbsentStudents] = useState([]);
   const [totalStudents, setTotalStudents] = useState([]);
   const [presentStudents, setPresentStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   //socket.io
 
@@ -44,6 +46,7 @@ function Session(props) {
       });
 
       setAbsentStudents(abs);
+      setLoading(false);
     };
     getPresent();
   }, [sessionid]);
@@ -70,17 +73,26 @@ function Session(props) {
   };
 
   const handleDeactivate = async (e) => {
-    await fetch(deactivateAttendanceURL(sessionid), options("GET"));
+    const fetchdata = async () => {
+      await fetch(deactivateAttendanceURL(sessionid), options("GET"));
 
-    const resp = await fetch(getPresentStudentsURL(sessionid), options("GET"));
-    const data = await resp.json();
-    setPresentStudents(data.data.present);
+      const resp = await fetch(
+        getPresentStudentsURL(sessionid),
+        options("GET")
+      );
+      const data = await resp.json();
+      setPresentStudents(data.data.present);
 
-    let abs = totalStudents.filter((student) => {
-      return !data.data.present.some((value) => value._id === student._id);
-    });
+      let abs = totalStudents.filter((student) => {
+        return !data.data.present.some((value) => value._id === student._id);
+      });
 
-    setAbsentStudents(abs);
+      setAbsentStudents(abs);
+
+      setLoading(false);
+    };
+    fetchdata();
+    setLoading(true);
     setActive(false);
   };
   return (
@@ -108,41 +120,53 @@ function Session(props) {
           </Button>
         )}
       </div>
-      {!active ? (
+      {loading ? (
+        <div className="spinner-container">
+          <InfinitySpin width="200" color="#4fa94d" />
+        </div>
+      ) : !active ? (
         <div id="present-students-list-container">
           <div className="m-3">
             <h3 className="ms-2 mt-3">Present Students</h3>
             <ul className="list-group list-group-flush list-group-numbered list-group-flush">
-              {presentStudents.map((student, index) => {
-                return (
-                  <li
-                    className="list-group-item p-3 bg-transparent color text-white"
-                    key={index}
-                  >
-                    {student.name}
-                  </li>
-                );
-              })}
+              {presentStudents.length !== 0 ? (
+                presentStudents.map((student, index) => {
+                  return (
+                    <li
+                      className="list-group-item p-3 bg-transparent color text-white"
+                      key={index}
+                    >
+                      {student.name}
+                    </li>
+                  );
+                })
+              ) : (
+                <p className="m-3">No one in here...</p>
+              )}
             </ul>
           </div>
           <div className="m-3">
             <h3 className="ms-2 mt-3">Absent Students</h3>
             <ul className="list-group list-group-flush list-group-numbered list-group-flush">
-              {absentStudents.map((student, index) => {
-                return (
-                  <li
-                    className="list-group-item p-3 bg-transparent color text-white"
-                    key={index}
-                  >
-                    {student.name}
-                  </li>
-                );
-              })}
+              {absentStudents.length !== 0 ? (
+                absentStudents.map((student, index) => {
+                  return (
+                    <li
+                      className="list-group-item p-3 bg-transparent color text-white"
+                      key={index}
+                    >
+                      {student.name}
+                    </li>
+                  );
+                })
+              ) : (
+                <p className="m-3">No one in here...</p>
+              )}
             </ul>
           </div>
         </div>
       ) : (
-        <div id="progress-bar-container-super">
+        <div id="progress-bar-container-super" className="mb-5">
           <div id="progress-bar-container">
             <CircularProgressbar
               value={presentCount}
