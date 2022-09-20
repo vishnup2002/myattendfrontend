@@ -49,3 +49,6 @@ export const handleAuthURL = (sid) =>
 
 export const verifyAuthURL = (sid) =>
   ROOT_URL + `user/student/verify-authentication?id=${sid}`;
+
+export const checkAuthenticatedURL = (user) =>
+  ROOT_URL + `user/${user}/check-authenticated`;

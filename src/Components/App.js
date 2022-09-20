@@ -15,8 +15,25 @@ import CreateSession from "./CreateSession";
 import Session from "./Session";
 import JoinClassroom from "./JoinClassroom";
 import RegisterAuth from "./RegisterAuth";
+import { useEffect } from "react";
+import { checkAuthenticatedURL } from "../Utils/constants";
+import { options } from "../Utils/req";
+import { useSelector } from "react-redux";
 
 function App() {
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    const checkAuth = async (user) => {
+      const resp = await fetch(checkAuthenticatedURL(user), options("GET"));
+      if (resp.status === 401) {
+        window.alert("Seems like session expired... Logout and login again");
+      }
+    };
+    if (auth.isLoggedIn) {
+      checkAuth(auth.user);
+    }
+  }, [auth]);
+
   return (
     <div className="App">
       <BrowserRouter>
