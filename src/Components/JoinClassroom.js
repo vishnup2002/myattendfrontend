@@ -12,15 +12,15 @@ function JoinClassroom(props) {
   useEffect(() => {
     if (!auth.isLoggedIn || auth.user !== "student") {
       setStatus("You are not signed in as a student");
+    } else {
+      const joinClass = async () => {
+        let resp = await fetch(joinClassroomURL(classid), options("GET"));
+        let data = await resp.json();
+        setStatus(data.message);
+      };
+
+      joinClass();
     }
-
-    const joinClass = async () => {
-      let resp = await fetch(joinClassroomURL(classid), options("GET"));
-      let data = await resp.json();
-      setStatus(data.message);
-    };
-
-    joinClass();
   }, [auth, classid]);
   return (
     <div>
